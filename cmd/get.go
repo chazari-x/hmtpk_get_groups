@@ -43,8 +43,16 @@ func init() {
 			}()
 
 			sch := schedule.NewSchedule(newSelenium)
-			file.WroteToFile(sch.GetTeachers())
-			file.WroteToFile(sch.GetGroups())
+
+			err = file.WriteToFile(sch.GetTeachers())
+			if err != nil {
+				log.Error(err)
+			}
+
+			err = file.WriteToFile(sch.GetGroups())
+			if err != nil {
+				log.Error(err)
+			}
 
 			log.Infof("Press CTRL-C to exit.")
 			sc := make(chan os.Signal, 1)

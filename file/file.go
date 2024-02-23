@@ -8,18 +8,17 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func WroteToFile(texts []string) {
+func WriteToFile(texts []string) error {
 	var f *os.File
 	var err error
 
 	if len(texts) == 0 {
-		goto exit
+		return nil
 	}
 
 	f, err = os.Create(fmt.Sprintf("%s.txt", time.Now().String()))
 	if err != nil {
-		log.Error(err)
-		goto exit
+		return err
 	}
 	defer func() {
 		_ = f.Close()
@@ -27,12 +26,10 @@ func WroteToFile(texts []string) {
 
 	for _, text := range texts {
 		if _, err = f.WriteString(fmt.Sprintf("%s\n", text)); err != nil {
-			log.Error(err)
-			goto exit
+			return err
 		}
 	}
 
-	log.Printf("Successfully wrote to %s", f.Name())
-
-exit:
+	log.Printf("Successfully written to %s", f.Name())
+	return nil
 }
